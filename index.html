@@ -161,8 +161,8 @@ footer { margin-top: 30px; color: var(--muted); font-size: 12.5px; }
     <h1>saidwell <span class="sub">Weekly KPIs &middot; Jefferson Fisher Media</span></h1>
     <span class="gen" id="gen"></span>
     <span class="ranges" role="group" aria-label="Rolling window">
-      <button data-n="7" aria-pressed="true">7d</button>
-      <button data-n="28" aria-pressed="false">28d</button>
+      <button data-n="7" aria-pressed="false">7d</button>
+      <button data-n="28" aria-pressed="true">28d</button>
       <button data-n="90" aria-pressed="false">90d</button>
     </span>
   </div>
@@ -259,7 +259,7 @@ function deltaChip(d) {
 // Rolling window state: 7 / 28 / 90 days, each compared with the window
 // before it. API-backed metrics use exact daily windows (DATA.rolling);
 // weekly-only metrics approximate with 1 / 4 / 13 complete weeks.
-let WINDOW = 7;
+let WINDOW = 28;
 const WEEKS_FOR = { 7: 1, 28: 4, 90: 13 };
 
 function liveWin(key) {
