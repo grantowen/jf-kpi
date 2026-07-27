@@ -273,11 +273,18 @@ function weeklyWin(vals, key) {
   return { cur: agg(cur), prev: prev.length ? agg(prev) : null, pct, money, li, weeks: n, live: false };
 }
 function windowFor(key, vals) { return liveWin(key) || weeklyWin(vals, key); }
+function weekEndLabel(lbl) {
+  // Weekly labels are the Sunday start; show the last finished day (Saturday).
+  const M = {Jan:0,Feb:1,Mar:2,Apr:3,May:4,Jun:5,Jul:6,Aug:7,Sep:8,Oct:9,Nov:10,Dec:11};
+  const [mon, day] = lbl.split(" ");
+  const d = new Date(+DATA.generated.slice(0, 4), M[mon], +day + 6);
+  return d.toLocaleDateString("en-US", {month: "short", day: "numeric"});
+}
 function windowSub(w) {
   if (!w) return "";
   if (w.live) return `${WINDOW}d to ${w.thru}`;
   if (w.level) return `total, vs ${w.weeks} wk${w.weeks > 1 ? "s" : ""} prior`;
-  return w.weeks === 1 ? `wk of ${DATA.weeks[w.li]}` : `${w.weeks} wks to ${DATA.weeks[w.li]}`;
+  return w.weeks === 1 ? `thru ${weekEndLabel(DATA.weeks[w.li])}` : `${w.weeks} wks thru ${weekEndLabel(DATA.weeks[w.li])}`;
 }
 function pairChip(w) {
   if (!w) return '<span class="d-flat">&ndash;</span>';
@@ -644,7 +651,7 @@ function renderRevenue() {
 
 function render() {
   document.getElementById("gen").textContent =
-    `Rolling data thru yesterday · weekly rows thru wk of ${DATA.weeks[CUR]} (next fill Monday) · updated ${DATA.generated}`;
+    `Rolling data thru yesterday · weekly rows thru ${weekEndLabel(DATA.weeks[CUR])} (next fill Monday) · updated ${DATA.generated}`;
   document.getElementById("tabs").innerHTML = TABS.map(t =>
     `<button role="tab" data-tab="${t.id}" aria-selected="${t.id === TAB}">${t.label}</button>`).join("");
   const view = document.getElementById("view");
